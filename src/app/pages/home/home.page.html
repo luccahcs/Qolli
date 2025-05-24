@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Contatos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item 
+      button 
+      *ngFor="let contact of contacts" 
+      (click)="openChat(contact.id)">
+      {{ contact.name }}
+    </ion-item>
+  </ion-list>
+</ion-content>
