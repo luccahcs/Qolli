@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+  <ion-button (click)="goBack()">
+    <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+    Voltar
+  </ion-button>
+</ion-buttons>
+
+</ion-button>
+
+  <ion-button (click)="goBack()">
+    <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+  </ion-button>
+</ion-buttons>
+
+    <ion-title>{{ contactName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngFor="let msg of messages">
+    <div 
+      [ngClass]="msg.fromMe ? 'my-message' : 'their-message'">
+      {{ msg.text }}
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-input 
+      [(ngModel)]="message" 
+      placeholder="Digite uma mensagem"
+      style="width: 80%;">
+    </ion-input>
+    <ion-button (click)="sendMessage()">Enviar</ion-button>
+  </ion-toolbar>
+</ion-footer>
