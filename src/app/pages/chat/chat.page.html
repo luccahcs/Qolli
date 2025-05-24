@@ -1,39 +1,36 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="custom-toolbar">
     <ion-buttons slot="start">
-  <ion-button (click)="goBack()">
-    <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
-    Voltar
-  </ion-button>
-</ion-buttons>
-
-</ion-button>
-
-  <ion-button (click)="goBack()">
-    <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-  </ion-button>
-</ion-buttons>
-
-    <ion-title>{{ contactName }}</ion-title>
+      <ion-button (click)="goBack()" class="back-button" shape="round">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        <ion-label>Voltar</ion-label>
+        <ion-icon/>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">{{ contactName }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div *ngFor="let msg of messages">
-    <div 
-      [ngClass]="msg.fromMe ? 'my-message' : 'their-message'">
+<ion-content [scrollEvents]="true" class="chat-content">
+  <div class="messages-wrapper">
+    <div *ngFor="let msg of messages" [ngClass]="msg.fromMe ? 'my-message' : 'their-message'" class="message-bubble">
       {{ msg.text }}
     </div>
   </div>
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-input 
-      [(ngModel)]="message" 
-      placeholder="Digite uma mensagem"
-      style="width: 80%;">
-    </ion-input>
-    <ion-button (click)="sendMessage()">Enviar</ion-button>
+  <ion-toolbar class="chat-input-toolbar">
+    <ion-item lines="none" class="input-container">
+      <ion-input
+        [(ngModel)]="message"
+        placeholder="Digite uma mensagem"
+        class="message-input"
+        clearInput>
+      </ion-input>
+      <ion-button fill="solid" color="primary" (click)="sendMessage()">
+        Enviar
+      </ion-button>
+    </ion-item>
   </ion-toolbar>
 </ion-footer>

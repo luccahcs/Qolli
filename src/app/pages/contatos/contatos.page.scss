@@ -1,0 +1,37 @@
+ion-title {
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+}
+
+.contact-item {
+  margin-bottom: 12px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.avatar-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #4a6df3;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 15px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+ion-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

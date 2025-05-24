@@ -7,10 +7,10 @@ import { Router } from '@angular/router';
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, IonicModule],
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
+  templateUrl: './contatos.page.html',
+  styleUrls: ['./contatos.page.scss'],
 })
-export class HomePage {
+export class ContatosPage {
   contacts = [
     { id: '1', name: 'Ana Silva' },
     { id: '2', name: 'Carlos Souza' },
@@ -21,5 +21,11 @@ export class HomePage {
 
   openChat(contactId: string) {
     this.router.navigate(['/chat', contactId]);
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '';
+    const parts = name.trim().split(' ');
+    return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
   }
 }

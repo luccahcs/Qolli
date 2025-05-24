@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { HomePage } from './pages/home/home.page';
+import { ContatosPage } from './pages/contatos/contatos.page';
 import { ChatPage } from './pages/chat/chat.page';
 
 export const routes: Routes = [
   {
-    path: '',
-    component: HomePage,
+    path: 'contatos',
+    component: ContatosPage,
   },
   {
     path: 'chat/:id',
