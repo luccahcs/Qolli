@@ -49,6 +49,6 @@ export class ChatPage {
   }
 
   goBack() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/contatos']);
   }
 }
