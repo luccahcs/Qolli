@@ -13,6 +13,11 @@ ion-title {
   padding: 8px 12px;
   display: flex;
   align-items: center;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .avatar-circle {

@@ -1,36 +1,78 @@
 <ion-header>
-  <ion-toolbar class="custom-toolbar">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()" class="back-button" shape="round">
-        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-        <ion-label>Voltar</ion-label>
-        <ion-icon/>
+      <ion-button (click)="goBack()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="center-title">{{ contactName }}</ion-title>
+    <ion-title>{{ contactName }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [scrollEvents]="true" class="chat-content">
-  <div class="messages-wrapper">
-    <div *ngFor="let msg of messages" [ngClass]="msg.fromMe ? 'my-message' : 'their-message'" class="message-bubble">
-      {{ msg.text }}
+
+<ion-content class="custom-content">
+  <div class="messages">
+    <div
+      *ngFor="let msg of messages$ | async"
+      [ngClass]="{
+        'my-message': msg.senderId === userId,
+        'other-message': msg.senderId !== userId
+      }"
+      class="message-bubble"
+    >
+      <div *ngIf="editingMessageId !== msg.id; else editTemplate">
+        {{ msg.text }}
+      </div>
+
+      <ng-template #editTemplate>
+        <ion-input
+          [(ngModel)]="editedText"
+          clearInput
+          autofocus
+          (keydown.enter)="saveEdit()"
+        ></ion-input>
+        <div class="edit-buttons">
+          <ion-button size="small" color="success" (click)="saveEdit()">
+            Salvar
+          </ion-button>
+          <ion-button size="small" color="medium" (click)="cancelEdit()">
+            Cancelar
+          </ion-button>
+        </div>
+      </ng-template>
+
+      <div
+        class="action-buttons"
+        *ngIf="msg.senderId === userId && editingMessageId !== msg.id"
+      >
+        <ion-button fill="clear" size="small" (click)="startEdit(msg)">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
+          size="small"
+          color="danger"
+          (click)="deleteMessage(msg.id!)"
+        >
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </div>
     </div>
   </div>
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar class="chat-input-toolbar">
-    <ion-item lines="none" class="input-container">
-      <ion-input
-        [(ngModel)]="message"
-        placeholder="Digite uma mensagem"
-        class="message-input"
-        clearInput>
-      </ion-input>
-      <ion-button fill="solid" color="primary" (click)="sendMessage()">
+  <ion-toolbar>
+    <ion-input
+      [(ngModel)]="newMessage"
+      placeholder="Digite sua mensagem"
+      (keydown.enter)="sendMessage()"
+      autofocus
+    ></ion-input>
+    <ion-buttons slot="end">
+      <ion-button (click)="sendMessage()" [disabled]="!newMessage.trim()">
         Enviar
       </ion-button>
-    </ion-item>
+    </ion-buttons>
   </ion-toolbar>
 </ion-footer>

@@ -1,27 +1,61 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Contatos</ion-title>
+
+    <ion-buttons slot="end">
+      <!-- Botão de perfil no canto direito -->
+      <ion-button [routerLink]="['/perfil']">
+        <ion-avatar slot="icon-only">
+          <img src="assets/avatar.png" />
+        </ion-avatar>
+      </ion-button>
+
+      <!-- Botão de adicionar contato -->
+      <ion-button (click)="addContact()">
+        <ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="custom-content">
   <ion-list lines="none">
-    <ion-item
-      class="contact-item"
-      button
-      *ngFor="let contact of contacts"
-      (click)="openChat(contact.id)">
+    <ion-item-sliding *ngFor="let contact of contacts$ | async">
+      <ion-item
+        class="contact-item"
+        button
+        (click)="openChat(contact.id!, contact.name)"
+      >
+        <div class="avatar-circle">
+          {{ getInitials(contact.name) }}
+        </div>
 
-      <div class="avatar-circle">
-        {{ getInitials(contact.name) }}
-      </div>
+        <ion-label>
+          <h2>{{ contact.name }}</h2>
+          <p>Toque para conversar</p>
+        </ion-label>
 
-      <ion-label>
-        <h2>{{ contact.name }}</h2>
-        <p>Toque para conversar</p>
-      </ion-label>
+        <ion-icon
+          name="chevron-forward-outline"
+          slot="end"
+          color="medium"
+        ></ion-icon>
+      </ion-item>
 
-      <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
-    </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option
+          color="danger"
+          (click)="deleteContact(contact.id!); $event.stopPropagation()"
+        >
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addContact()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

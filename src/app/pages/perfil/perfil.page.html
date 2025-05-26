@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/contatos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card *ngIf="user$ | async as user" class="profile-card">
+    <ion-card-header>
+      <ion-card-title>
+        {{ user.displayName || 'Usuário' }}
+      </ion-card-title>
+      <ion-card-subtitle>
+        {{ user.email }}
+      </ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-button expand="full" color="primary" (click)="voltar()">
+    Voltar para Contatos
+  </ion-button>
+
+  <ion-button expand="full" color="danger" (click)="logout()">
+    Sair
+  </ion-button>
+</ion-content>
