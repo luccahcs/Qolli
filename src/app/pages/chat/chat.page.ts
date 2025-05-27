@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { FormsModule } from '@angular/forms';
 
 import {
@@ -14,17 +13,23 @@ import {
   orderBy,
   doc,
   getDoc,
+  deleteDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 
 import { Auth, authState } from '@angular/fire/auth';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 interface Message {
   id?: string;
-  senderId: string;
+  fromId: string;
+  toId: string;
   text: string;
   timestamp: any;
+  conversationKey: string;
+  deletedFor?: string[];
 }
 
 @Component({
@@ -37,7 +42,7 @@ interface Message {
 export class ChatPage implements OnInit {
   contactUid!: string;
   contactName!: string;
-  chatId!: string;
+  conversationKey!: string;
 
   messages$!: Observable<Message[]>;
   messageText = '';
@@ -55,7 +60,7 @@ export class ChatPage implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.contactUid = params.get('id')!;
-      this.tryLoadChat();
+      this.tryLoadConversation();
     });
 
     this.route.queryParams.subscribe(params => {
@@ -65,17 +70,19 @@ export class ChatPage implements OnInit {
     authState(this.auth).subscribe(user => {
       if (user) {
         this.currentUserId = user.uid;
-        this.tryLoadChat();
+        this.tryLoadConversation();
       }
     });
   }
 
-  async tryLoadChat() {
+  async tryLoadConversation() {
     if (this.currentUserId && this.contactUid) {
-      this.chatId = this.generateChatId(this.currentUserId, this.contactUid);
+      this.conversationKey = this.generateConversationKey(
+        this.currentUserId,
+        this.contactUid
+      );
       this.loadMessages();
 
-      // Se o nome do contato não veio pelos queryParams, tenta buscar no Firestore
       if (!this.contactName) {
         const userDoc = doc(this.firestore, `users/${this.contactUid}`);
         const userSnap = await getDoc(userDoc);
@@ -89,19 +96,25 @@ export class ChatPage implements OnInit {
     }
   }
 
-  generateChatId(uid1: string, uid2: string): string {
-    return [uid1, uid2].sort().join('_');
+  generateConversationKey(uid1: string, uid2: string): string {
+    return [uid1, uid2].sort().join('-');
   }
 
   loadMessages() {
     const messagesRef = collection(
       this.firestore,
-      `chats/${this.chatId}/messages`
+      `conversations/${this.conversationKey}/messages`
     );
 
     const q = query(messagesRef, orderBy('timestamp'));
 
-    this.messages$ = collectionData(q, { idField: 'id' }) as Observable<Message[]>;
+    this.messages$ = collectionData(q, { idField: 'id' }).pipe(
+      map((messages: any[]) =>
+        messages.filter(
+          (msg) => !(msg.deletedFor || []).includes(this.currentUserId)
+        )
+      )
+    ) as Observable<Message[]>;
   }
 
   async sendMessage() {
@@ -110,23 +123,72 @@ export class ChatPage implements OnInit {
 
     const messagesRef = collection(
       this.firestore,
-      `chats/${this.chatId}/messages`
+      `conversations/${this.conversationKey}/messages`
     );
 
     await addDoc(messagesRef, {
-      senderId: this.currentUserId,
+      conversationKey: this.conversationKey,
+      fromId: this.currentUserId,
+      toId: this.contactUid,
       text,
       timestamp: new Date(),
+      deletedFor: [], // ✅ Corrigido aqui
     });
 
     this.messageText = '';
   }
 
   isMyMessage(msg: Message): boolean {
-    return msg.senderId === this.currentUserId;
+    return msg.fromId === this.currentUserId;
   }
 
   voltar() {
     this.router.navigate(['/contatos']);
+  }
+
+  async confirmDelete(msg: Message) {
+    const alert = await this.alertCtrl.create({
+      header: 'Apagar mensagem',
+      message: 'Tem certeza que deseja apagar esta mensagem?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Apagar',
+          role: 'destructive',
+          handler: () => {
+            this.deleteMessage(msg);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  async deleteMessage(msg: Message) {
+    const msgRef = doc(
+      this.firestore,
+      `conversations/${this.conversationKey}/messages/${msg.id}`
+    );
+
+    const alreadyDeletedFor = msg.deletedFor || [];
+
+    if (alreadyDeletedFor.includes(this.currentUserId)) return;
+
+    const updatedDeletedFor = [...alreadyDeletedFor, this.currentUserId];
+
+    if (
+      updatedDeletedFor.includes(this.currentUserId) &&
+      updatedDeletedFor.includes(this.contactUid)
+    ) {
+      await deleteDoc(msgRef);
+    } else {
+      await updateDoc(msgRef, {
+        deletedFor: updatedDeletedFor,
+      });
+    }
   }
 }

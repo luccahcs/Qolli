@@ -1,15 +1,59 @@
-ion-item.my-message {
-  --background: #dcf8c6;
-  justify-content: flex-end;
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.message-item {
+  display: flex;
+  align-items: center;
+  max-width: 80%;
+  margin: 6px 8px;
+}
+
+.message-item.my-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message-item.other-message {
+  align-self: flex-start;
+  flex-direction: row;
+}
+
+.message-bubble {
+  background-color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.message-item.my-message .message-bubble {
+  background-color: #dcf8c6;
+}
+
+.message-bubble p {
+  margin: 0;
+  font-size: 16px;
+  word-break: break-word;
+}
+
+.message-bubble small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #888;
   text-align: right;
 }
 
-ion-item.other-message {
-  --background: #fff;
-  justify-content: flex-start;
-  text-align: left;
+ion-button {
+  margin: 0 4px;
 }
 
-ion-label {
-  width: 100%;
+ion-content {
+  --padding-bottom: 8px;
+}
+
+ion-footer {
+  --background: #f8f8f8;
 }
