@@ -4,6 +4,14 @@
       <h2>Cadastrar</h2>
 
       <ion-input
+        label="Nome"
+        labelPlacement="floating"
+        type="text"
+        [(ngModel)]="name"
+        placeholder="Seu nome completo">
+      </ion-input>
+
+      <ion-input
         label="Email"
         labelPlacement="floating"
         type="email"

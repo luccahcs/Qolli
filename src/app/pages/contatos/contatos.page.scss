@@ -1,42 +1,69 @@
-ion-title {
-  font-weight: 600;
-  font-size: 18px;
-  text-align: center;
+/* contatos.page.scss */
+
+ion-item.my-message,
+ion-item.other-message {
+  --padding-start: 16px;
+  --padding-end: 16px;
 }
 
-.contact-item {
-  margin-bottom: 12px;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  background: #fff;
-  transition: transform 0.1s ease, box-shadow 0.2s ease;
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
+/* Avatar chip personalizado */
+ion-avatar {
+  width: 40px;
+  height: 40px;
 
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  ion-chip {
+    font-weight: bold;
+    font-size: 1rem;
+    --background: var(--ion-color-primary);
+    color: white;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 20px;
+    padding: 0 12px;
   }
 }
 
-.avatar-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #4a6df3;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 15px;
-  margin-right: 16px;
-  flex-shrink: 0;
+/* Nome do contato */
+ion-label h2 {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+  color: var(--ion-color-dark);
 }
 
-ion-label {
+/* UID menor e discreto */
+ion-label p {
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+/* Botão de adicionar contato */
+ion-button {
+  margin-bottom: 12px;
+}
+
+/* Estilo do texto dentro da lista */
+ion-list {
+  margin-top: 12px;
+}
+
+/* Ícones */
+ion-icon {
+  font-size: 1.4rem;
+}
+
+/* Faz o botão deslizar ocupar toda a altura do item */
+ion-item-option {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
+}
+
+/* Ajusta espaçamento geral para mobile */
+ion-content {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
 }

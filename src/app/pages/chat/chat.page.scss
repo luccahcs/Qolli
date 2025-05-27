@@ -1,42 +1,15 @@
-.messages {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
-.message-bubble {
-  max-width: 75%;
-  padding: 8px 12px;
-  border-radius: 16px;
-  margin-bottom: 8px;
-  word-wrap: break-word;
-  position: relative;
-}
-
-.my-message {
-  align-self: flex-end;
-  background-color: #dcf8c6;
-}
-
-.other-message {
-  align-self: flex-start;
-  background-color: #ffffff;
-}
-
-.action-buttons {
-  display: flex;
+ion-item.my-message {
+  --background: #dcf8c6;
   justify-content: flex-end;
-  gap: 4px;
-  margin-top: 4px;
+  text-align: right;
 }
 
-.edit-buttons {
-  display: flex;
-  gap: 4px;
-  margin-top: 4px;
+ion-item.other-message {
+  --background: #fff;
+  justify-content: flex-start;
+  text-align: left;
 }
 
-ion-input {
-  --padding-start: 8px;
-  --padding-end: 8px;
+ion-label {
+  width: 100%;
 }

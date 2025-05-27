@@ -14,6 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RegisterPage {
 
+  name = '';
   email = '';
   password = '';
 
@@ -25,7 +26,7 @@ export class RegisterPage {
 
   async register() {
     try {
-      await this.authService.register(this.email, this.password);
+      await this.authService.register(this.email, this.password, this.name);
       const alert = await this.alertController.create({
         header: 'Sucesso',
         message: 'Usuário cadastrado!',

@@ -1,31 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';  // <-- Importa Router
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { FormsModule } from '@angular/forms';
 
 import {
   Firestore,
   collection,
   collectionData,
   addDoc,
-  CollectionReference,
-  serverTimestamp,
   query,
   orderBy,
   doc,
-  updateDoc,
-  deleteDoc,
+  getDoc,
 } from '@angular/fire/firestore';
+
 import { Auth, authState } from '@angular/fire/auth';
 
 import { Observable } from 'rxjs';
-import { FormsModule } from '@angular/forms';
 
 interface Message {
   id?: string;
+  senderId: string;
   text: string;
   timestamp: any;
-  senderId: string;
 }
 
 @Component({
@@ -36,104 +35,98 @@ interface Message {
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-  contactId!: string;
+  contactUid!: string;
   contactName!: string;
-  userId!: string;
+  chatId!: string;
 
   messages$!: Observable<Message[]>;
-  private messagesRef!: CollectionReference;
+  messageText = '';
 
-  newMessage = '';
+  currentUserId!: string;
 
-  editingMessageId: string | null = null;
-  editedText: string = '';
-
-  // Injeta o Router no construtor
   constructor(
     private route: ActivatedRoute,
     private firestore: Firestore,
     private auth: Auth,
-    private router: Router  // <--- Adicionado aqui
+    private router: Router,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
-    this.contactId = this.route.snapshot.paramMap.get('id')!;
-    this.contactName = this.route.snapshot.queryParamMap.get('name')!;
+    this.route.paramMap.subscribe(params => {
+      this.contactUid = params.get('id')!;
+      this.tryLoadChat();
+    });
+
+    this.route.queryParams.subscribe(params => {
+      this.contactName = params['name'] || '';
+    });
 
     authState(this.auth).subscribe(user => {
       if (user) {
-        this.userId = user.uid;
-
-        const chatId = this.getChatId(this.userId, this.contactId);
-
-        this.messagesRef = collection(
-          this.firestore,
-          `chats/${chatId}/messages`
-        );
-
-        this.messages$ = collectionData(
-          query(this.messagesRef, orderBy('timestamp', 'asc')),
-          { idField: 'id' }
-        ) as Observable<Message[]>;
+        this.currentUserId = user.uid;
+        this.tryLoadChat();
       }
     });
   }
 
-  // Método para voltar para contatos
-  goBack() {
-    this.router.navigate(['/contatos']);
+  async tryLoadChat() {
+    if (this.currentUserId && this.contactUid) {
+      this.chatId = this.generateChatId(this.currentUserId, this.contactUid);
+      this.loadMessages();
+
+      // Se o nome do contato não veio pelos queryParams, tenta buscar no Firestore
+      if (!this.contactName) {
+        const userDoc = doc(this.firestore, `users/${this.contactUid}`);
+        const userSnap = await getDoc(userDoc);
+        if (userSnap.exists()) {
+          const data = userSnap.data() as any;
+          this.contactName = data.name || 'Contato';
+        } else {
+          this.contactName = 'Usuário Desconhecido';
+        }
+      }
+    }
+  }
+
+  generateChatId(uid1: string, uid2: string): string {
+    return [uid1, uid2].sort().join('_');
+  }
+
+  loadMessages() {
+    const messagesRef = collection(
+      this.firestore,
+      `chats/${this.chatId}/messages`
+    );
+
+    const q = query(messagesRef, orderBy('timestamp'));
+
+    this.messages$ = collectionData(q, { idField: 'id' }) as Observable<Message[]>;
   }
 
   async sendMessage() {
-    const text = this.newMessage.trim();
+    const text = this.messageText.trim();
     if (!text) return;
 
-    await addDoc(this.messagesRef, {
+    const messagesRef = collection(
+      this.firestore,
+      `chats/${this.chatId}/messages`
+    );
+
+    await addDoc(messagesRef, {
+      senderId: this.currentUserId,
       text,
-      timestamp: serverTimestamp(),
-      senderId: this.userId,
+      timestamp: new Date(),
     });
 
-    this.newMessage = '';
+    this.messageText = '';
   }
 
-  private getChatId(uid1: string, uid2: string): string {
-    return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
+  isMyMessage(msg: Message): boolean {
+    return msg.senderId === this.currentUserId;
   }
 
-  startEdit(message: Message) {
-    this.editingMessageId = message.id!;
-    this.editedText = message.text;
-  }
-
-  async saveEdit() {
-    if (!this.editingMessageId) return;
-
-    const docRef = doc(
-      this.firestore,
-      `chats/${this.getChatId(this.userId, this.contactId)}/messages`,
-      this.editingMessageId
-    );
-
-    await updateDoc(docRef, {
-      text: this.editedText,
-    });
-
-    this.editingMessageId = null;
-    this.editedText = '';
-  }
-
-  cancelEdit() {
-    this.editingMessageId = null;
-    this.editedText = '';
-  }
-
-  async deleteMessage(messageId: string) {
-    const docRef = doc(
-      this.firestore,
-      `chats/${this.getChatId(this.userId, this.contactId)}/messages`,
-      messageId
-    );
-    await deleteDoc(docRef);
+  voltar() {
+    this.router.navigate(['/contatos']);
   }
 }
