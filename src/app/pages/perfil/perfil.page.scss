@@ -1,64 +1,61 @@
-ion-content {
-  --background: #f8f9fa;
-}
-
 .profile-card {
-  text-align: center;
-  margin-top: 40px;
-  padding-bottom: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --padding-start: 20px;
+  --padding-end: 20px;
 }
 
-.profile-avatar {
-  margin: 20px auto 10px auto;
-  width: 120px;
-  height: 120px;
-  border: 4px solid #3880ff;
-  border-radius: 50%;
+.info-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: white;
+  margin-bottom: 16px;
+
+  ion-icon {
+    font-size: 22px;
+    color: #3880ff;
+    margin-right: 10px;
+  }
+
+  .label {
+    font-weight: 600;
+    width: 80px;
+    color: #444;
+  }
+
+  .value {
+    flex: 1;
+    color: #222;
+    font-size: 16px;
+    word-break: break-word;
+  }
 }
 
-.profile-avatar ion-icon {
-  font-size: 100px;
-  color: #3880ff;
+.uid-row {
+  .uid-text {
+    font-family: monospace;
+    margin-right: 12px;
+  }
+  
+  ion-button.copy-btn {
+    --padding-top: 4px;
+    --padding-bottom: 4px;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    font-size: 14px;
+    height: 28px;
+    
+    ion-icon {
+      font-size: 16px;
+      color: #3880ff;
+      margin-right: 4px;
+    }
+  }
 }
 
-ion-card-title {
-  font-size: 1.5rem;
-  margin-top: 10px;
-  color: #222;
-}
-
-ion-card-subtitle {
-  color: #666;
-}
-
-.uid-text {
-  word-break: break-all;
-  color: #3880ff;
-  font-weight: 500;
-}
-
-ion-button {
-  margin-top: 20px;
-  border-radius: 12px;
-  --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-ion-toolbar {
-  --background: #3880ff;
-  --color: #fff;
-}
-
-ion-title {
-  font-weight: bold;
-}
-
-ion-back-button,
-ion-icon {
-  color: #fff;
+ion-button[color="danger"] {
+  margin-top: 30px;
+  font-weight: 600;
+  ion-icon {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 8px;
+  }
 }

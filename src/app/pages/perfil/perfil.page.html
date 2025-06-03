@@ -3,23 +3,37 @@
     <ion-title>Perfil</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="voltar()">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        VOLTAR
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card *ngIf="user$ | async as user">
-    <ion-card-header>
-      <ion-card-title>{{ user.name || 'Usuário' }}</ion-card-title>
-      <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
-    </ion-card-header>
+  <ion-card *ngIf="user$ | async as user" class="profile-card">
     <ion-card-content>
-      <p><strong>Seu UID:</strong></p>
-      <ion-text color="primary">
-        <p>{{ user.uid }}</p>
-      </ion-text>
+      <div class="info-row">
+        <ion-icon name="person-outline"></ion-icon>
+        <span class="label">Nome:</span>
+        <span class="value">{{ user.name || 'Usuário' }}</span>
+      </div>
+
+      <div class="info-row">
+        <ion-icon name="mail-outline"></ion-icon>
+        <span class="label">Email:</span>
+        <span class="value">{{ user.email }}</span>
+      </div>
+
+      <div class="info-row uid-row">
+        <ion-icon name="key-outline"></ion-icon>
+        <span class="label">Meu UID:</span>
+        <span class="value uid-text">{{ user.uid }}</span>
+        <ion-button fill="outline" size="small" (click)="copiarUID(user.uid)" class="copy-btn">
+          <ion-icon slot="start" name="copy-outline"></ion-icon>
+          Copiar
+        </ion-button>
+      </div>
     </ion-card-content>
   </ion-card>
 

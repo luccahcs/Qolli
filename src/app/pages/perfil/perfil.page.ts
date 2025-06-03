@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { RouterModule, Router } from '@angular/router';
-import { Auth, authState, signOut, User } from '@angular/fire/auth';
+import { Auth, authState, signOut } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { Observable, of, from } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
+import { Clipboard } from '@capacitor/clipboard';
 
 @Component({
   selector: 'app-perfil',
@@ -21,7 +22,8 @@ export class PerfilPage implements OnInit {
     private auth: Auth,
     private firestore: Firestore,
     private router: Router,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
@@ -36,12 +38,21 @@ export class PerfilPage implements OnInit {
             if (docSnap.exists()) {
               return { ...docSnap.data(), email: user.email, uid: user.uid };
             }
-            // Se não existir no Firestore, retorna dados básicos do auth
             return { email: user.email, uid: user.uid, name: 'Usuário' };
           })
         );
       })
     );
+  }
+
+  async copiarUID(uid: string) {
+    await Clipboard.write({ string: uid });
+    const toast = await this.toastCtrl.create({
+      message: 'UID copiado para a área de transferência!',
+      duration: 2000,
+      color: 'success',
+    });
+    await toast.present();
   }
 
   async logout() {
