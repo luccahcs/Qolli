@@ -1,0 +1,16 @@
+.splash-content {
+  --background: var(--ion-color-light);
+}
+
+.splash-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.logo {
+  width: 150px;
+  margin-bottom: 20px;
+}

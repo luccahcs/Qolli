@@ -1,11 +1,15 @@
 import { Routes } from '@angular/router';
-import { ContatosPage } from './pages/contatos/contatos.page';
-import { ChatPage } from './pages/chat/chat.page';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
+    path: 'splash',
+    loadComponent: () =>
+      import('./pages/splash/splash.page').then((m) => m.SplashPage),
+  },
+  {
     path: '',
-    redirectTo: 'login', // ✅ Agora inicia no login
+    redirectTo: 'splash',
     pathMatch: 'full',
   },
   {
@@ -20,16 +24,20 @@ export const routes: Routes = [
   },
   {
     path: 'contatos',
-    component: ContatosPage,
+    loadComponent: () =>
+      import('./pages/contatos/contatos.page').then((m) => m.ContatosPage),
+    canActivate: [AuthGuard], 
   },
   {
     path: 'chat/:id',
-    component: ChatPage,
+    loadComponent: () =>
+      import('./pages/chat/chat.page').then((m) => m.ChatPage),
+    canActivate: [AuthGuard], 
   },
-  
- {
-  path: 'perfil',
-  loadComponent: () => import('./pages/perfil/perfil.page').then(m => m.PerfilPage),
-},
-
+  {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./pages/perfil/perfil.page').then((m) => m.PerfilPage),
+    canActivate: [AuthGuard], 
+  },
 ];
