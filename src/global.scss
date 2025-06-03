@@ -35,3 +35,31 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+:root {
+  --text-color: #000;
+  --input-background: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: #fff;
+    --input-background: #1e1e1e;
+  }
+}
+
+/* Aplicando nos elementos */
+ion-label, ion-text, ion-button, ion-item {
+  color: var(--text-color);
+}
+
+ion-input {
+  --background: var(--input-background);
+  --color: var(--text-color);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+ion-item {
+  --background: var(--input-background);
+}
