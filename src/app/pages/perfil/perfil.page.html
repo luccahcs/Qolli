@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Perfil</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        VOLTAR
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card *ngIf="user$ | async as user" class="profile-card">
+    <ion-card-content>
+      <div class="info-row">
+        <ion-icon name="person-outline"></ion-icon>
+        <span class="label">Nome:</span>
+        <span class="value">{{ user.name || 'Usuário' }}</span>
+      </div>
+
+      <div class="info-row">
+        <ion-icon name="mail-outline"></ion-icon>
+        <span class="label">Email:</span>
+        <span class="value">{{ user.email }}</span>
+      </div>
+
+      <div class="info-row uid-row">
+        <ion-icon name="key-outline"></ion-icon>
+        <span class="label">Meu UID:</span>
+        <span class="value uid-text">{{ user.uid }}</span>
+        <ion-button fill="outline" size="small" (click)="copiarUID(user.uid)" class="copy-btn">
+          <ion-icon slot="start" name="copy-outline"></ion-icon>
+          Copiar
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="block" color="danger" (click)="logout()">
+    <ion-icon slot="start" name="log-out-outline"></ion-icon>
+    Sair
+  </ion-button>
+</ion-content>

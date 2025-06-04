@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+     <ion-title (click)="goToProfile()"
+               style="cursor: pointer; text-decoration: underline;">
+      {{ contactName }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="messages-container">
+    <div
+      *ngFor="let msg of messages$ | async"
+      [ngClass]="{
+        'my-message': isMyMessage(msg),
+        'other-message': !isMyMessage(msg)
+      }"
+      class="message-item"
+    >
+      <div class="message-bubble">
+        <p>{{ msg.text }}</p>
+        <small>{{ isMyMessage(msg) ? 'Você' : contactName }}, {{ msg.timestamp * 1000 | date:'shortTime' }}</small>
+      </div>
+
+      <ion-button
+        fill="clear"
+        size="small"
+        (click)="confirmDelete(msg)"
+      >
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item lines="none" style="padding: 0;">
+      <ion-input
+        [(ngModel)]="messageText"
+        placeholder="Digite sua mensagem"
+        fill="outline"
+        style="flex: 1; margin-right: 8px;"
+        (keydown.enter)="sendMessage()"
+      ></ion-input>
+      <ion-button (click)="sendMessage()" slot="end" expand="block">
+        Enviar
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

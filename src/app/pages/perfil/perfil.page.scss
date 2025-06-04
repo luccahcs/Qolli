@@ -1,0 +1,69 @@
+.profile-card {
+  --padding-start: 20px;
+  --padding-end: 20px;
+}
+
+.profile-photo-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+
+  ion-icon {
+    font-size: 22px;
+    color: #3880ff;
+    margin-right: 10px;
+  }
+
+  .label {
+    font-weight: 600;
+    width: 80px;
+    color: #444;
+  }
+
+  .value {
+    flex: 1;
+    color: #222;
+    font-size: 16px;
+    word-break: break-word;
+  }
+}
+
+.uid-row {
+  .uid-text {
+    font-family: monospace;
+    margin-right: 12px;
+  }
+  
+  ion-button.copy-btn {
+    --padding-top: 4px;
+    --padding-bottom: 4px;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    font-size: 14px;
+    height: 28px;
+    
+    ion-icon {
+      font-size: 16px;
+      color: #3880ff;
+      margin-right: 4px;
+    }
+  }
+}
+
+ion-button[color="danger"] {
+  margin-top: 30px;
+  font-weight: 600;
+  ion-icon {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 8px;
+  }
+}

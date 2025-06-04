@@ -1,0 +1,27 @@
+<ion-content fullscreen="true">
+  <div class="login-container">
+      <ion-header>Qolli</ion-header>
+    <div class="login-card">
+      <h2>Login</h2>
+
+      <ion-input
+        label="Email"
+        labelPlacement="floating"
+        type="email"
+        [(ngModel)]="email"
+        placeholder="seuemail@email.com">
+      </ion-input>
+
+      <ion-input
+        label="Senha"
+        labelPlacement="floating"
+        type="password"
+        [(ngModel)]="password"
+        placeholder="sua senha">
+      </ion-input>
+
+      <ion-button expand="block" (click)="login()">Entrar</ion-button>
+      <ion-button expand="block" fill="outline" (click)="goToRegister()">Cadastrar</ion-button>
+    </div>
+  </div>
+</ion-content>

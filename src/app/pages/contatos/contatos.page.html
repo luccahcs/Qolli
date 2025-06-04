@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Contatos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openProfile()">
+        <ion-icon slot="icon-only" name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-button expand="block" (click)="addContact()">
+    <ion-icon slot="start" name="person-add-outline"></ion-icon>
+    Adicionar Contato
+  </ion-button>
+  <ion-list *ngIf="(contacts$ | async)?.length; else noContacts">
+    <ion-card *ngFor="let contact of contacts$ | async">
+      <ion-item lines="none" button detail (click)="openChat(contact.uid, contact.name)">
+        <ion-avatar slot="start">
+          <ion-chip color="primary">{{ getInitials(contact.name) }}</ion-chip>
+        </ion-avatar>
+
+        <ion-label>
+          <h2>{{ contact.name }}</h2>
+          <p *ngIf="contact.uid">UID: {{ contact.uid }}</p>
+        </ion-label>
+
+        <ion-button fill="clear" color="danger" slot="end" (click)="deleteContact(contact.id); $event.stopPropagation()">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+
+  <ng-template #noContacts>
+    <ion-text color="medium">
+      <p class="ion-text-center">Nenhum contato adicionado.</p>
+    </ion-text>
+  </ng-template>
+</ion-content>
